@@ -2,7 +2,7 @@
 
 int ft_perror(char *str)
 {
-    while(*str)
+    while (*str)
         write(2, str++, 1);
     return (1);
 }
@@ -11,8 +11,9 @@ int ft_cd(char **av, int i)
 {
     if (i != 2)
         return (ft_perror(BAD));
-    if (chdir(av[i]) == -1)
-        return (ft_perror(PATH), ft_perror(av[i]), ft_perror("\n"));
+    (void) av;
+    if (chdir(av[1]) == -1)
+        return (ft_perror(PATH), ft_perror(av[1]), ft_perror("\n"));
     return (0);
 }
 
@@ -20,10 +21,10 @@ int ft_exec(char **av, char **env, int i)
 {
     int pid;
     int fd[2];
-    int has_pipe = av[i] && !strcmp(av[i], "|");
     int g_exit;
+    int has_pipe = av[i] && !strcmp(av[i], "|");
 
-    if(has_pipe && pipe(fd) == -1)
+    if (has_pipe && pipe(fd) == -1)
         return (ft_perror(FATAL));
     pid = fork();
     if (pid == 0)
@@ -43,7 +44,7 @@ int ft_exec(char **av, char **env, int i)
 int main(int ac, char **av, char **env)
 {
     int i = 0;
-    int g_exit = 0;
+    int g_exit;
 
     if (ac < 2)
         return (1);
@@ -51,7 +52,7 @@ int main(int ac, char **av, char **env)
     {
         av += i;
         i = 0;
-        while (av[i] && strcmp(av[i], "|") && strcmp(av[i], ";"))
+        while (av[i] && strcmp(av[i], ";") && strcmp(av[i], "|"))
             i++;
         if (!strcmp(*av, "cd"))
             g_exit = ft_cd(av, i);
